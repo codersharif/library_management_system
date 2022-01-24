@@ -1,7 +1,3 @@
-## Meal Management System v1.0(MMS)
-
-<p align="center"><img src="https://github.com/codersharif/Meal_Management_System/blob/main/mms.png" width="500"></p>
-
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
