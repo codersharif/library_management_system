@@ -73,7 +73,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{URL::to('bookIssue')}}" class="nav-link {{Helper::currentPath('bookissue')}}">
+                                <a href="{{URL::to('bookIssue')}}" class="nav-link {{Helper::currentPath('bookIssue')}}">
                                     <!-- <i class="fas fa-rocket"></i> -->
 
                                     <p>Manage Book Issue & Return</p>

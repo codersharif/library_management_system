@@ -9,96 +9,71 @@
                     <h4>Edit Student</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{URL::to('/student/update/'.$user->student_id)}}">
+                    <form method="post" action="{{URL::to('/bookIssue/update/'.$target->id)}}">
                         <input type="hidden" name="filter" value="{{Helper::queryPageStr($qpArr)}}" />
                         @csrf
                         @method('put')
                         <div class="form-group">
-                            <select name="user_group_id" class="form-control">
-                                <option value="">Select User Group</option>
-                                @foreach($groupList as $group)
-                                <?php
-                                    $selected = '';
-                                    if( $group->id == $user->user_group_id ){
-                                        $selected = 'selected';
-                                    }
-                                ?>
-                                <option value="{{$group->id}}" <?=$selected?>>{{$group->group_name}}</option>
+                            <label for="student_id">Students</label>
+                            <select name="student_id" class="form-control">
+                                <option value="">Select Student</option>
+                                @foreach($studentList as $val)
+                                <option value="{{$val->id}}">{{$val->roll_no}}</option>
                                 @endforeach
                             </select>
-                            @error('user_group_id')
+                            @error('student_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" value="{{$user->user_name}}"
-                                class="form-control" />
-                            @error('name')
-                            <span class="text-danger">{{$errors->first('name')}}</span>
+                            <label for="name">Books</label>
+                            <select name="book_id" class="form-control">
+                                <option value="">Select Book</option>
+                                @foreach($bookList as $val)
+                                <option value="{{$val->id}}">{{$val->book_name}}</option>
+                                @endforeach
+                            </select>
+                            @error('book_id')
+                            <span class="text-danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" value="{{$user->email}}" class="form-control" />
-                            @error('email')
-                            <span class="text-danger">{{$errors->first('email')}}</span>
+                            <label for="issue_date">Issue Date</label>
+                            <input type="date" name="issue_date" id="issue_date" class="form-control" />
+                            @error('issue_date')
+                            <span class="text-danger">{{$errors->first('issue_date')}}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="roll_no">Roll No.</label>
-                            <input type="text" name="roll_no" value="{{$user->roll_no}}" id="roll_no"
-                                class="form-control" />
-                            @error('roll_no')
-                            <span class="text-danger">{{$errors->first('roll_no')}}</span>
+                            <label for="return_date">Return Date</label>
+                            <input type="date" name="return_date" id="return_date" class="form-control" />
+                            @error('return_date')
+                            <span class="text-danger">{{$errors->first('return_date')}}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="dep">Department</label>
-                            <input type="text" name="dep" value="{{$user->dep}}" id="dep" class="form-control" />
-                            @error('dep')
-                            <span class="text-danger">{{$errors->first('dep')}}</span>
+                            <label for="qty">Qty</label>
+                            <input type="number" min="1" name="qty" id="qty" class="form-control" />
+                            @error('qty')
+                            <span class="text-danger">{{$errors->first('qty')}}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="batch">Batch</label>
-                            <input type="text" name="batch" value="{{$user->batch}}" id="batch" class="form-control" />
-                            @error('batch')
-                            <span class="text-danger">{{$errors->first('batch')}}</span>
+                            <label for="received_date">Receive Data</label>
+                            <input type="date" name="received_date" id="received_date" class="form-control" />
+                            @error('received_date')
+                            <span class="text-danger">{{$errors->first('received_date')}}</span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="semester">Semester</label>
-                            <input type="text" name="semester" value="{{$user->semester}}" id="semester"
-                                class="form-control" />
-                            @error('semester')
-                            <span class="text-danger">{{$errors->first('semester')}}</span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="mobile">Mobile</label>
-                            <input type="text" name="mobile" value="{{$user->mobile}}" id="mobile"
-                                class="form-control" />
-                            @error('email')
-                            <span class="text-danger">{{$errors->first('mobile')}}</span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" />
-                            @error('password')
-                            <span class="text-danger">{{$errors->first('password')}}</span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="conf_password">Confirm Password</label>
-                            <input type="password" name="conf_password" id="conf_password" class="form-control" />
-                            @error('conf_password')
-                            <span class="text-danger">{{$errors->first('conf_password')}}</span>
-                            @enderror
+                            <label for="">Return Status</label>
+                            <select name="return_status" class="form-control">
+                                <option value="1">Pending</option>
+                                <option value="2">Received</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <a href="{{ URL::to('/student'.Helper::queryPageStr($qpArr)) }}"
+                        <a href="{{ URL::to('/bookIssue'.Helper::queryPageStr($qpArr)) }}"
                             class="btn btn-circle btn-outline grey-salsa">Cancel</a>
                     </form>
 

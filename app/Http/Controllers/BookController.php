@@ -91,7 +91,7 @@ class BookController extends Controller {
         $pageNumber = $qpArr['filter'];
         //end back same page after update
         $rules = [
-            'bookshelf_id ' => 'required',
+            'bookshelf_id' => 'required',
             'book_name' => 'required',
         ];
 
