@@ -11,6 +11,7 @@ use App\Book;
 use App\Student;
 use App\User;
 use App\BookIssue;
+Use Auth;
 use Helper;
 
 class BookIssueController extends Controller {
@@ -20,7 +21,13 @@ class BookIssueController extends Controller {
         $qpArr = $request->all();
         $targetArr = BookIssue::join('books','books.id','=','book_issue.book_id')
                     ->join('students','students.id','=','book_issue.student_id')
-                    ->select('book_issue.*','books.book_name','students.roll_no')->get();
+                    ->select('book_issue.*','books.book_name','students.roll_no');
+
+         if( Auth::user()->user_group_id == '103' ){
+             $student =  Student::where('user_id',Auth::user()->id)->select('id')->first();
+            $targetArr = $targetArr->where('book_issue.student_id',$student->id);
+         }
+         $targetArr = $targetArr->orderBy('book_issue.id','DESC')->get();
 
         return view('bookIssue.index')->with(compact('targetArr', 'qpArr'));
     }
@@ -37,8 +44,10 @@ class BookIssueController extends Controller {
         $pageNumber = $qpArr['filter'];
 
         $rules = [
-            'bookshelf_id' => 'required',
-            'book_name' => 'required',
+            'student_id' => 'required',
+            'book_id' => 'required',
+            'issue_date' => 'required',
+            'qty' => 'required',
         ];
 
         $messages = [];
@@ -51,21 +60,20 @@ class BookIssueController extends Controller {
                             ->withErrors($validator);
         }
 
-        $target = new Book;
-        $target->book_name = $request->book_name;
-        $target->bookshelf_id  = $request->bookshelf_id ;
-        $target->author = $request->author;
-        $target->edition = $request->edition;
-        $target->type = $request->type;
-        $target->genre = $request->genre;
-        $target->publication_name = $request->publication_name;
-        $target->category = $request->category;
+        $target = new BookIssue;
+        $target->student_id = $request->student_id;
+        $target->book_id  = $request->book_id ;
+        $target->issue_date = $request->issue_date;
+        $target->return_date = $request->return_date;
+        $target->return_status = $request->return_status;
+        $target->qty = $request->qty;
+        $target->received_date = $request->received_date;
 
         if ($target->save()) {
-            Session::flash('success', 'Book Create Succesfully');
+            Session::flash('success', 'Book Issue Create Succesfully');
             return redirect('bookIssue');
         } else {
-            Session::flash('error', 'Book could not be Created');
+            Session::flash('error', 'Book Issue could not be Created');
             return redirect('bookIssue/create' . $pageNumber);
         }
     }
@@ -88,15 +96,17 @@ class BookIssueController extends Controller {
 
     public function update(Request $request, $id) {
 
-        $target = Book::find($id);
+        $target = BookIssue::find($id);
 
         //begin back same page after update
         $qpArr = $request->all();
         $pageNumber = $qpArr['filter'];
         //end back same page after update
         $rules = [
-            'bookshelf_id' => 'required',
-            'book_name' => 'required',
+            'student_id' => 'required',
+            'book_id' => 'required',
+            'issue_date' => 'required',
+            'qty' => 'required',
         ];
 
         $messages = [];
@@ -108,41 +118,23 @@ class BookIssueController extends Controller {
                             ->withErrors($validator);
         }
 
-        $target->book_name = $request->book_name;
-        $target->bookshelf_id  = $request->bookshelf_id ;
-        $target->author = $request->author;
-        $target->edition = $request->edition;
-        $target->type = $request->type;
-        $target->genre = $request->genre;
-        $target->publication_name = $request->publication_name;
-        $target->category = $request->category;
+        $target->student_id = $request->student_id;
+        $target->book_id  = $request->book_id ;
+        $target->issue_date = $request->issue_date;
+        $target->return_date = $request->return_date;
+        $target->return_status = $request->return_status;
+        $target->qty = $request->qty;
+        $target->received_date = $request->received_date;
 
         if ($target->save()) {
-            Session::flash('success', 'Book Update Succesfully');
+            Session::flash('success', 'Book Issue Update Succesfully');
             return redirect('bookIssue');
         } else {
-            Session::flash('error', 'Book could not be Updated');
+            Session::flash('error', 'Book Issue could not be Updated');
             return redirect('bookIssue/' . $id . '/edit' . $pageNumber);
         }
     }
 
-    public function destroy(Request $request, $id) {
-        $target = Book::find($id);
-        //begin back same page after update
-        $qpArr = $request->all();
-        $pageNumber = !empty($qpArr['page']) ? '?page=' . $qpArr['page'] : '?page=';
-        //end back same page after update
 
-        if (empty($target)) {
-            Session::flash('error','Invalid Data ID');
-        }
-
-        if ($target->delete()) {
-            Session::flash('error','Book Delete Succesfully');
-        } else {
-            Session::flash('error', 'Book could not be Deleted');
-        }
-        return redirect('bookIssue' . $pageNumber);
-    }
 
 }

@@ -8,6 +8,7 @@
             <div class="card mt-3">
                 <div class="card-header">
                     <h3 class="card-title">Book Issue & Return List</h3>
+                    @if( in_array(Auth::user()->user_group_id,['101','102']))
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
                             <div class="input-group-append">
@@ -17,6 +18,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -60,23 +62,17 @@
                                 <td>{{$target->qty}}</td>
                                 <td>{{$target->received_date}}</td>
                                 <td>
+                                    @if( in_array(Auth::user()->user_group_id,['101','102']))
+                                    @if( $target->return_status == '1' )
                                     <div>
-                                        <form method="post"
-                                            action="{{ URL::to('bookIssue/' . $target->id .'/'.Helper::queryPageStr($qpArr)) }}">
-                                            @csrf
-                                            @method('delete')
-                                            <a class="btn btn-xs btn-primary tooltips vcenter" title="Edit"
-                                                href="{{ URL::to('bookIssue/' . $target->id . '/edit'.Helper::queryPageStr($qpArr)) }}">
-                                                Edit
-                                            </a>
-                                            <button class="btn btn-xs btn-danger delete tooltips vcenter"
-                                                onclick="return confirm('Are you sure, want to delete!');"
-                                                type="submit">
-                                                Delete
-                                            </button>
-                                        </form>
-
+                                        <a class="btn btn-xs btn-primary tooltips vcenter" title="Edit"
+                                            href="{{ URL::to('bookIssue/' . $target->id . '/edit'.Helper::queryPageStr($qpArr)) }}">
+                                            Edit
+                                        </a>
                                     </div>
+                                    @endif
+                                    @endif
+
                                 </td>
                             </tr>
                             @endforeach
