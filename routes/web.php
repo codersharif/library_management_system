@@ -57,6 +57,8 @@ Route::put('/student/update/{id}','StudentController@update');
 Route::delete('/student/{id}','StudentController@destroy');
 // BOOk
 Route::get('/book','BookController@index');
+Route::POST('/book/filter','BookController@filter');
+Route::get('/book/filter','BookController@bookFilter');
 Route::get('/book/create','BookController@create');
 Route::post('/book/store','BookController@store');
 Route::get('/book/{id}/edit','BookController@edit');

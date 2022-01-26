@@ -9,6 +9,7 @@ use Validator;
 use App\BookShelf;
 use App\Book;
 use Helper;
+use Redirect;
 
 class BookController extends Controller {
 
@@ -139,6 +140,42 @@ class BookController extends Controller {
             Session::flash('error', 'Book could not be Deleted');
         }
         return redirect('book' . $pageNumber);
+    }
+
+
+    public function filter(Request $request){
+        $url = 'fil_book=' . $request->fil_book . '&fil_bookshelf_no=' . $request->fil_bookshelf_no;
+        return Redirect::to('book/filter?' . $url);
+    }
+
+    public function bookFilter(Request $request){
+        // print_r($request->all());
+        // exit;
+        $qpArr = $request->all();
+
+        if( empty( $request->fil_book ) && empty($request->fil_bookshelf_no) ){
+            $targetArr = [];
+            return view('book.filter')->with(compact('targetArr', 'qpArr'));
+        }
+
+        $targetArr = Book::join('bookshelf','bookshelf.id','=','books.bookshelf_id')
+        ->select('books.*','bookshelf.bookshelf_no','bookshelf.bookshelf_name');
+            //begin filtering
+            $searchText = $request->fil_book;
+            if (!empty($searchText)) {
+                $targetArr->where(function ($query) use ($searchText) {
+                    $query->where('books.book_name', 'LIKE', '%' . $searchText . '%');
+                });
+            }
+            if (!empty($request->fil_bookshelf_no)) {
+                // $bookshelf = BookShelf::where('bookshelf_no',$request->fil_bookshelf_no)->first();
+                $targetArr = $targetArr->where('bookshelf.bookshelf_no',$request->fil_bookshelf_no);
+
+            }
+            $targetArr = $targetArr->get();
+
+
+        return view('book.filter')->with(compact('targetArr', 'qpArr'));
     }
 
 }

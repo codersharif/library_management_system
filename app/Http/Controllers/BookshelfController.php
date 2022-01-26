@@ -28,7 +28,7 @@ class BookshelfController extends Controller {
         $pageNumber = $qpArr['filter'];
 
         $rules = [
-            'bookshelf_no' => 'required',
+            'bookshelf_no' => 'required|unique:bookshelf',
             'bookshelf_name' => 'required'
         ];
 
@@ -77,8 +77,9 @@ class BookshelfController extends Controller {
         $pageNumber = $qpArr['filter'];
         //end back same page after update
         $rules = [
-            'bookshelf_no' => 'required',
-            'bookshelf_name' => 'required'
+            'bookshelf_name' => 'required',
+            'bookshelf_no' => 'required|unique:bookshelf,bookshelf_no,' . $id,
+
         ];
 
         $messages = [];

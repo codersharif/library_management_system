@@ -41,7 +41,7 @@ class StudentController extends Controller {
         $rules = [
             'user_group_id' => 'required',
             'name' => 'required',
-            'roll_no' => 'required',
+            'roll_no' => 'required|unique:students',
             'dep' => 'required',
             'batch' => 'required',
             'email' => 'required|unique:users',
@@ -117,8 +117,8 @@ class StudentController extends Controller {
         $rules = [
             'user_group_id' => 'required',
             'name' => 'required',
-            'email' => 'required|unique:users,email,' . $id,
-            'roll_no' => 'required',
+            'email' => 'required|unique:users,email,' . $target->id,
+            'roll_no' => 'required|unique:students,roll_no,' . $id,
             'dep' => 'required',
             'batch' => 'required'
         ];
