@@ -33,7 +33,7 @@ class Helper {
 
         return $open;
     }
-    
+
      public static function formatDateTime($dateTime = '0000-00-00 00:00:00') {
         return date('d F Y h:i A', strtotime($dateTime));
     }
